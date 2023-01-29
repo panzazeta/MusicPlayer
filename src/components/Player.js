@@ -27,7 +27,7 @@ const Player = ({currentSong, isPlaying, setIsPlaying}) => {
             <FontAwesomeIcon onClick={playSongHandler} className="play" size="2x" icon={faPlay} />
             <FontAwesomeIcon className="skip-forward" size="2x" icon={faAngleRight} />
             </div>
-            <audio ref={audioRef} src="{currentSong.audio}"></audio>
+            <audio ref={audioRef} src={currentSong.audio}></audio>
         </div>
     );
 };
