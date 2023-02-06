@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
     faPlay, 
@@ -17,23 +17,23 @@ const Player = ({
     setCurrentSong,
     setSongs,
 }) => {
-    //UseEffect
-    useEffect(() => {
+
+    const activeLibraryHandler = (nextPrev) => {
         const newSongs = songs.map((song) => {
-            if (song.id === currentSong.id) {
-                return {
-                    ...song, 
-                    active: true,
-                };
-            }else{
-                return {
-                    ...song, 
-                    active: false,
-                };
-            }
-        });
-        setSongs(newSongs);
-    },[currentSong]);
+        if (song.id === nextPrev.id) {
+            return {
+                ...song, 
+                active: true,
+            };
+        }else{
+            return {
+                ...song, 
+                active: false,
+            };
+        }
+    });
+    setSongs(newSongs);
+    }
     //Event Handlers
     const playSongHandler = () => {
        if(isPlaying){
@@ -56,15 +56,18 @@ const Player = ({
         const skipTrackHandler= async (direction) => {
             let currentIndex= songs.findIndex((song) => song.id===currentSong.id);
             if (direction === "skip-forward") {
-            await setCurrentSong(songs[(currentIndex + 1) % songs.length])
+            await setCurrentSong(songs[(currentIndex + 1) % songs.length]);
+            activeLibraryHandler(songs[(currentIndex + 1) % songs.length])
             }
             if (direction === "skip-back") {
                 if((currentIndex - 1) % songs.length === - 1){
                     await setCurrentSong(songs[songs.length -1]);
+                    activeLibraryHandler(songs[songs.length -1]);
                     if (isPlaying) audioRef.current.play();
                     return
                 }
-                await setCurrentSong(songs[(currentIndex - 1) % songs.length])
+                await setCurrentSong(songs[(currentIndex - 1) % songs.length]);
+                activeLibraryHandler(songs[(currentIndex - 1) % songs.length]);
             }
             if (isPlaying) audioRef.current.play();
         }
